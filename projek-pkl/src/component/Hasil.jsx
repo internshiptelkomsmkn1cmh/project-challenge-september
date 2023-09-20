@@ -146,7 +146,7 @@ export default class Hasil extends Component {
                         </ListGroup>
                     )
                 }
-                {/* <TotalBayar keranjangs={keranjangs} {...this.props}/> */}
+                <TotalBayar keranjangs={keranjangs} {...this.props}/>
             </Col>
         );
     }
