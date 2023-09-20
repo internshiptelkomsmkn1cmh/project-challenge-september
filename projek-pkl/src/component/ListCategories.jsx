@@ -41,7 +41,11 @@ function ListCategories({ changeCategory, categoryYangDipilih }) {
           <ListGroup.Item>Loading...</ListGroup.Item>
         ) : (
           categories.map(category => (
-            <ListGroup.Item>
+            <ListGroup.Item
+              key={category.id}
+              onClick={() => changeCategory(category.nama)}
+              className={categoryYangDipilih === category.nama?'category-aktif':''}
+            >
               <h5>
                 <Icon nama={category.nama} /> {category.nama}
               </h5>
