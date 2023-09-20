@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Badge, Col, ListGroup, Row} from 'react-bootstrap';
 import {numberWithCommas} from '../utils/Utils';
-// import TotalBayar from './TotalBayar';
+import TotalBayar from './TotalBayar';
 import ModalKeranjang from './ModalKeranjang';
 import {API_URL} from '../utils/Constants';
 import axios from 'axios';
