@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Row, Col, Button } from 'react-bootstrap';
 import { numberWithCommas } from '../utils/Utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../utils/Constants';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 
-export default class TotalBayar extends Component {
+class TotalBayar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pemesan: '', 
+    };
+  }
+
   submitTotalBayar = (totalBayar) => {
     const pesanan = {
       total_harga: totalBayar,
+      pemesan: this.state.pemesan, 
       menus: this.props.keranjangs,
     };
 
@@ -21,6 +30,11 @@ export default class TotalBayar extends Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  // Method untuk mengubah nama pemesan
+  changePemesan = (event) => {
+    this.setState({ pemesan: event.target.value });
   };
 
   render() {
@@ -35,11 +49,21 @@ export default class TotalBayar extends Component {
             <h5 className='mt-3'>
               Total Harga : <strong className='rupiah'>Rp. {numberWithCommas(TotalBayar)}</strong>
             </h5>
+            <h5>
+              Pemesan :
+              <input
+                type="text"
+                placeholder="Nama Pemesan"
+                value={this.state.pemesan}
+                onChange={this.changePemesan} // Menggunakan method untuk mengubah nama pemesan
+                className='pemesan ms-2 text-center'
+              />
+            </h5>
             <Button
               className='btn-bayar'
               variant='primary'
-              onClick={() => this.submitTotalBayar(TotalBayar)}> {/* Menggunakan TotalBayar yang sudah dihitung */}
-              <FontAwesomeIcon icon={faShoppingCart} />
+              onClick={() => this.submitTotalBayar(TotalBayar)}>
+              <FontAwesomeIcon icon={faShoppingCart} className='me-1'/>
               <strong>BAYAR</strong>
             </Button>
           </Col>
@@ -48,3 +72,5 @@ export default class TotalBayar extends Component {
     );
   }
 }
+
+export default withRouter(TotalBayar);
