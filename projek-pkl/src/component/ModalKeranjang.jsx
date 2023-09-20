@@ -15,18 +15,16 @@ const ModalKeranjang = ({
     changeHandle,
     handleSubmit,
     totalHarga,
-    hapusPesanan, 
+    hapusPesanan,
+    handleUpdateKeranjangs, // Tambahkan prop untuk handleUpdateKeranjangs
 }) => {
     if (keranjangDetail) {
         return (
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton="closeButton">
                     <Modal.Title>
-                        {keranjangDetail.product.nama}
-                        {' '}
-                        <strong>
-                            (Rp. {numberWithCommas(keranjangDetail.product.harga)})
-                        </strong>
+                        {keranjangDetail.product.nama}{' '}
+                        <strong>(Rp. {numberWithCommas(keranjangDetail.product.harga)})</strong>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -34,9 +32,7 @@ const ModalKeranjang = ({
                         <Form.Group className="mb-3" controlId="totalHarga">
                             <Form.Label>Total Harga :</Form.Label>
                             <p>
-                                <strong>
-                                    Rp. {numberWithCommas(totalHarga)}
-                                </strong>
+                                <strong>Rp. {numberWithCommas(totalHarga)}</strong>
                             </p>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="jumlah">
@@ -67,7 +63,7 @@ const ModalKeranjang = ({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => hapusPesanan(keranjangDetail.id)}>
-                        <FontAwesomeIcon icon={faTrash} className='me-1'/>
+                        <FontAwesomeIcon icon={faTrash} className="me-1"/>
                         Hapus Pesanan
                     </Button>
                 </Modal.Footer>
@@ -77,9 +73,7 @@ const ModalKeranjang = ({
         return (
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton="closeButton">
-                    <Modal.Title>
-                        Kosong
-                    </Modal.Title>
+                    <Modal.Title>Kosong</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Kosong</Modal.Body>
                 <Modal.Footer>
@@ -93,6 +87,6 @@ const ModalKeranjang = ({
             </Modal>
         );
     }
-}
+};
 
 export default ModalKeranjang;

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ListCategories from '../component/ListCategories';
 import Menus from '../component/Menus';
-import {Row, Col, Container} from 'react-bootstrap';
 import Hasil from '../component/Hasil';
+import {Row, Col, Container, Form, Button} from 'react-bootstrap';
 import {API_URL} from '../utils/Constants';
 import axios from 'axios';
 import swal from 'sweetalert';
@@ -14,7 +14,9 @@ export default class Home extends Component {
         this.state = {
             menus: [],
             categoryYangDipilih: 'Makanan',
-            keranjangs: []
+            keranjangs: [],
+            searchTerm: '',
+            hasilPencarian: []
         };
     }
 
@@ -23,17 +25,21 @@ export default class Home extends Component {
         this.fetchKeranjangs();
     }
 
-    componentDidUpdate(prevState) {
-        if (this.state.keranjangs !== prevState.keranjangs) {
-            this.fetchKeranjangs();
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.searchTerm !== prevState.searchTerm) {
+            this.fetchMenus();
         }
     }
 
     fetchMenus = () => {
+        const {categoryYangDipilih, searchTerm} = this.state;
+
+        const query = searchTerm
+            ? `?category.nama=${categoryYangDipilih}&q=${searchTerm}`
+            : `?category.nama=${categoryYangDipilih}`;
+
         axios
-            .get(
-                API_URL + "/products?category.nama=" + this.state.categoryYangDipilih
-            )
+            .get(API_URL + '/products' + query)
             .then((res) => {
                 const menus = res.data;
                 this.setState({menus});
@@ -41,11 +47,11 @@ export default class Home extends Component {
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }
 
     fetchKeranjangs = () => {
         axios
-            .get(API_URL + "/keranjangs")
+            .get(API_URL + '/keranjangs')
             .then((res) => {
                 const keranjangs = res.data;
                 this.setState({keranjangs});
@@ -53,20 +59,12 @@ export default class Home extends Component {
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }
 
-    changeCategory = (value) => {
-        this.setState({categoryYangDipilih: value, menus: []});
+    handleSearchChange = (value) => {
+        this.setState({searchTerm: value});
 
-        axios
-            .get(API_URL + "/products?category.nama=" + value)
-            .then((res) => {
-                const menus = res.data;
-                this.setState({menus});
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        this.fetchMenus();
     };
 
     masukKeranjang = (value) => {
@@ -128,30 +126,51 @@ export default class Home extends Component {
     };
 
     render() {
-        const {menus, categoryYangDipilih, keranjangs} = this.state;
-        return (
-                <div className="mt-3">
-                    <Container fluid={true}>
-                        <Row>
-                            <ListCategories
-                                changeCategory={this.changeCategory}
-                                categoryYangDipilih={categoryYangDipilih}/>
-                            <Col>
-                                <h4 className="fw-bold">Daftar Menu</h4>
-                                <hr/>
-                                <Row>
-                                    {
-                                        menus && menus.map((menu, index) => (
-                                            <Menus key={menu.id + index} menu={menu} masukKeranjang={this.masukKeranjang}/>
-                                        ))
-                                    }
+        const {menus, categoryYangDipilih, keranjangs, hasilPencarian} = this.state;
 
+        const displayedMenus = hasilPencarian.length > 0
+            ? hasilPencarian
+            : menus;
+
+        return (
+            <div className="mt-3">
+                <Container fluid={true}>
+                    <Row>
+                        <ListCategories
+                            changeCategory={this.changeCategory}
+                            categoryYangDipilih={categoryYangDipilih}/>
+                        <Col>
+                            <h4 className="fw-bold">Daftar Menu</h4>
+                            <hr/>
+                            <Form>
+                                <Row>
+                                    <Col xs="auto">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Search"
+                                            className="mr-sm-2"
+                                            value={this.state.searchTerm}
+                                            onChange={(e) => this.handleSearchChange(e.target.value)}/>
+                                    </Col>
+                                    <Col xs="auto">
+                                        <Button variant="primary" onClick={this.handleSearch}>
+                                            Cari
+                                        </Button>
+                                    </Col>
                                 </Row>
-                            </Col>
-                            <Hasil keranjangs={keranjangs} {...this.props}/>
-                        </Row>
-                    </Container>
-                </div>
+                            </Form>
+                            <Row>
+                                {
+                                    displayedMenus.map((menu, index) => (
+                                        <Menus key={menu.id + index} menu={menu} masukKeranjang={this.masukKeranjang}/>
+                                    ))
+                                }
+                            </Row>
+                        </Col>
+                        <Hasil keranjangs={keranjangs} handleUpdateKeranjangs={this.fetchKeranjangs}/>
+                    </Row>
+                </Container>
+            </div>
         );
     }
 }

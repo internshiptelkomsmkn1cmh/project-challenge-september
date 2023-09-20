@@ -13,18 +13,17 @@ export default class Hasil extends Component {
 
         this.state = {
             showModal: false,
-            keranjangDetail: null, 
+            keranjangDetail: null,
             jumlah: 0,
             keterangan: '',
-            totalHarga: 0,
+            totalHarga: 0
         };
     }
 
     handleShow = (menuKeranjang) => {
-        this.setState({
-            showModal: true, keranjangDetail: menuKeranjang, jumlah: menuKeranjang.jumlah, 
-            keterangan: menuKeranjang.keterangan, totalHarga: menuKeranjang.total_harga
-        });
+        this.setState(
+            {showModal: true, keranjangDetail: menuKeranjang, jumlah: menuKeranjang.jumlah, keterangan: menuKeranjang.keterangan, totalHarga: menuKeranjang.total_harga}
+        );
     }
 
     handleClose = () => {
@@ -34,7 +33,7 @@ export default class Hasil extends Component {
     tambah = () => {
         this.setState({
             jumlah: this.state.jumlah + 1,
-            totalHarga: this.state.keranjangDetail.product.harga*(this.state.jumlah + 1)
+            totalHarga: this.state.keranjangDetail.product.harga * (this.state.jumlah + 1)
         })
     }
 
@@ -42,15 +41,13 @@ export default class Hasil extends Component {
         if (this.state.jumlah !== 1) {
             this.setState({
                 jumlah: this.state.jumlah - 1,
-                totalHarga: this.state.keranjangDetail.product.harga*(this.state.jumlah - 1)
+                totalHarga: this.state.keranjangDetail.product.harga * (this.state.jumlah - 1)
             })
         }
     }
 
     changeHandle = (event) => {
-        this.setState({
-            keterangan: event.target.value
-        })
+        this.setState({keterangan: event.target.value})
     }
 
     handleSubmit = (event) => {
@@ -64,9 +61,9 @@ export default class Hasil extends Component {
             product: this.state.keranjangDetail.product,
             keterangan: this.state.keterangan
         };
-    
+
         axios
-            .put(API_URL + "/keranjangs/"+this.state.keranjangDetail.id, data)
+            .put(API_URL + "/keranjangs/" + this.state.keranjangDetail.id, data)
             .then((res) => {
                 swal({
                     title: "Update Pesanan",
@@ -75,6 +72,10 @@ export default class Hasil extends Component {
                     button: false,
                     timer: 1500
                 });
+                // Memanggil prop handleUpdateKeranjangs untuk memperbarui keranjangs di Home
+                this
+                    .props
+                    .handleUpdateKeranjangs();
             })
             .catch((error) => {
                 console.log(error);
@@ -84,9 +85,9 @@ export default class Hasil extends Component {
     hapusPesanan = (id) => {
 
         this.handleClose();
-    
+
         axios
-            .delete(API_URL + "/keranjangs/"+id)
+            .delete(API_URL + "/keranjangs/" + id)
             .then((res) => {
                 swal({
                     title: "Hapus Pesanan",
@@ -95,6 +96,10 @@ export default class Hasil extends Component {
                     button: false,
                     timer: 1500
                 });
+                // Memanggil prop handleUpdateKeranjangs untuk memperbarui keranjangs di Home
+                this
+                    .props
+                    .handleUpdateKeranjangs();
             })
             .catch((error) => {
                 console.log(error);
@@ -142,7 +147,7 @@ export default class Hasil extends Component {
                                 kurang={this.kurang}
                                 changeHandle={this.changeHandle}
                                 handleSubmit={this.handleSubmit}
-                                hapusPesanan={this.hapusPesanan} />
+                                hapusPesanan={this.hapusPesanan}/>
                         </ListGroup>
                     )
                 }
