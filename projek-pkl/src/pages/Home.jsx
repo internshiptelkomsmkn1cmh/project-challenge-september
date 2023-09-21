@@ -47,7 +47,7 @@ export default class Home extends Component {
             .catch((error) => {
                 console.log(error);
             });
-    }
+    };
 
     fetchKeranjangs = () => {
         axios
@@ -59,7 +59,7 @@ export default class Home extends Component {
             .catch((error) => {
                 console.log(error);
             });
-    }
+    };
 
     handleSearchChange = (value) => {
         this.setState({searchTerm: value});
@@ -69,7 +69,7 @@ export default class Home extends Component {
 
     masukKeranjang = (value) => {
         axios
-            .get(API_URL + "/keranjangs?product.id=" + value.id)
+            .get(API_URL + '/keranjangs?product.id=' + value.id)
             .then((res) => {
                 if (res.data.length === 0) {
                     const keranjang = {
@@ -78,12 +78,12 @@ export default class Home extends Component {
                         product: value
                     };
                     axios
-                        .post(API_URL + "/keranjangs", keranjang)
+                        .post(API_URL + '/keranjangs', keranjang)
                         .then((res) => {
                             swal({
-                                title: "Masuk Ke Keranjang!",
-                                text: keranjang.product.nama + " telah dipesan",
-                                icon: "success",
+                                title: 'Masuk Ke Keranjang!',
+                                text: keranjang.product.nama + ' telah dipesan',
+                                icon: 'success',
                                 button: false,
                                 timer: 1500
                             });
@@ -104,12 +104,12 @@ export default class Home extends Component {
                     };
 
                     axios
-                        .put(API_URL + "/keranjangs/" + res.data[0].id, keranjang)
+                        .put(API_URL + '/keranjangs/' + res.data[0].id, keranjang)
                         .then((res) => {
                             swal({
-                                title: "Masuk Ke Keranjang!",
-                                text: keranjang.product.nama + " telah dipesan",
-                                icon: "success",
+                                title: 'Masuk Ke Keranjang!',
+                                text: keranjang.product.nama + ' telah dipesan',
+                                icon: 'success',
                                 button: false,
                                 timer: 1500
                             });
@@ -125,6 +125,15 @@ export default class Home extends Component {
             });
     };
 
+    changeCategory = (category) => {
+        this.setState({
+            categoryYangDipilih: category
+        }, () => {
+            // Setelah mengubah kategori, panggil fetchMenus untuk memperbarui tampilan menu
+            this.fetchMenus();
+        });
+    };
+
     render() {
         const {menus, categoryYangDipilih, keranjangs, hasilPencarian} = this.state;
 
@@ -133,27 +142,27 @@ export default class Home extends Component {
             : menus;
 
         return (
-            <div className="mt-3">
+            <div className='mt-3'>
                 <Container fluid={true}>
                     <Row>
                         <ListCategories
                             changeCategory={this.changeCategory}
                             categoryYangDipilih={categoryYangDipilih}/>
                         <Col>
-                            <h4 className="fw-bold">Daftar Menu</h4>
+                            <h4 className='fw-bold'>Daftar Menu</h4>
                             <hr/>
                             <Form>
                                 <Row>
-                                    <Col xs="auto">
+                                    <Col xs='auto'>
                                         <Form.Control
-                                            type="text"
-                                            placeholder="Search"
-                                            className="mr-sm-2"
+                                            type='text'
+                                            placeholder='Search'
+                                            className='mr-sm-2'
                                             value={this.state.searchTerm}
                                             onChange={(e) => this.handleSearchChange(e.target.value)}/>
                                     </Col>
-                                    <Col xs="auto">
-                                        <Button variant="primary" onClick={this.handleSearch}>
+                                    <Col xs='auto'>
+                                        <Button variant='primary' onClick={this.handleSearch}>
                                             Cari
                                         </Button>
                                     </Col>
