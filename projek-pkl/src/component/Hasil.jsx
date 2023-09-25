@@ -72,7 +72,6 @@ export default class Hasil extends Component {
                     button: false,
                     timer: 1500
                 });
-                // Memanggil prop handleUpdateKeranjangs untuk memperbarui keranjangs di Home
                 this
                     .props
                     .handleUpdateKeranjangs();
@@ -96,7 +95,6 @@ export default class Hasil extends Component {
                     button: false,
                     timer: 1500
                 });
-                // Memanggil prop handleUpdateKeranjangs untuk memperbarui keranjangs di Home
                 this
                     .props
                     .handleUpdateKeranjangs();
