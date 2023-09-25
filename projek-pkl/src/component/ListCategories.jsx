@@ -1,3 +1,5 @@
+// ListCategories.js
+// This is ListCategories component
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Col, ListGroup} from 'react-bootstrap';

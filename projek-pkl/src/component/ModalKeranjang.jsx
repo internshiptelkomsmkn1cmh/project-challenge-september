@@ -16,7 +16,6 @@ const ModalKeranjang = ({
     handleSubmit,
     totalHarga,
     hapusPesanan,
-    handleUpdateKeranjangs, // Tambahkan prop untuk handleUpdateKeranjangs
 }) => {
     if (keranjangDetail) {
         return (
